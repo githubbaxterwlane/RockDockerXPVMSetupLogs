@@ -1,0 +1,46 @@
+Install Chocolatey 
+
+	Set-ExecutionPolicy Bypass -Scope Process -Force; [System.Net.ServicePointManager]::SecurityProtocol = [System.Net.ServicePointManager]::SecurityProtocol -bor 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))
+
+7 Zip
+
+	choco install 7zip
+
+Node JS
+
+	choco install nodejs-lts
+
+VS Code
+
+	choco install vscode
+
+GIT
+
+	choco install git -y
+
+VS 2019
+
+	choco install visualstudio2019enterprise
+
+	had to manually install the options 
+
+PS Core 
+
+	choco install powershell-core
+
+Windows Terminal 
+
+	choco install microsoft-windows-terminal
+
+Docker Desktop
+
+	choco install docker-desktop -y
+
+Open SSH Server
+
+	Get-WindowsCapability -Online | Where-Object { $_.Name -like "*SSH.S*" } | Add-WindowsCapability -Online
+	Get-Service | Where-Object { $_.Description -like "*SSH*"  } | Set-Service -StartupType Automatic
+	Get-Service | Where-Object { $_.Description -like "*SSH*"  } | Start-Service
+
+Notepad++	
+
