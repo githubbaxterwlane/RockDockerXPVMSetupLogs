@@ -341,7 +341,31 @@ After rebooting Docker still failed with the WSL2 error
 
 After restarting it again after it failed I was able to change to the Windows Containers reboot and it is fine 
 
+**Note there is clearly a better way to have done this install, consider improving these instructions so this error is not encountered**
 
+28. Clone the Global Server repo 
+
+Connect to the VPN by executing "Pulse Secure Start Stop" from this VMs host
+
+**From an elevated powershell window run the following commands**
+
+```Powershell
+cd c:\projects
+git clone https://git.rockfin.com/marketing-web/sitecore-global-components-server.git
+```
+
+Disconnect from the VPN by executing "Pulse Secure Start Stop" from this VMs host
+
+29. Setup Powershell 5 and 7 as best for a Developer (__Highly Optional But Nice To Have__)
+
+```Powershell
+
+Write-Warning("Ignore 'Module Repository 'PSGallery' exists.' error if you see it")
+Register-PSRepository -Default
+Install-Module Posh-Git
+
+
+```
 
 
 
