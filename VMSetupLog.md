@@ -308,8 +308,38 @@ Start-Process "$Env:USERPROFILE\Downloads\wsl_update_x64.msi"
 
 Click "Restart" on the WSL 2 Installation is incomplete prompt
 
+Throws an error as below
 
+<img src="images/DockerWSL2Error.jpg">
 
+Now install a Linux Distro from the Microsoft store
+
+    * Open "Microsoft Store"
+    * Pick a Distro, I picked "Ubunto" and install it
+
+**Ubuntu Installing from the Microsoft Store**
+
+<img src="images/UbuntuInstalling.jpg">
+
+    * Click the windows key and search for and select Ubunto
+
+**Ubuntu Installing after launching**
+
+<img src="images/UbuntuInstallingAfterLaunch.jpg">
+
+    * Enter the username for your WSL2 Ubuntu instance
+    * Enter a password 
+    * Reboot your computer
+    * The error is still there so...
+    * Start Docker Desktop Twice and choose to switch to windows containers from the docker icon near the clock 
+
+Fails again but prompts to run the below script 
+
+Enable-WindowsOptionalFeature -Online -FeatureName $("Microsoft-Hyper-V", "Containers") -All
+
+After rebooting Docker still failed with the WSL2 error
+
+After restarting it again after it failed I was able to change to the Windows Containers reboot and it is fine 
 
 
 
