@@ -269,7 +269,7 @@ choco install visualstudio2019-workload-visualstudioextension --includeOptional 
 
 * Disconnect the VPN with "Pulse Secure Start Stop" 
 
-<h2>23. Install .Net SDK 4.8 (full)</h2>
+<h2>23. Install .Net 4.8 Developer Pack</h2>
 
 **From an elevated powershell window run the following commands**
 
@@ -591,7 +591,7 @@ If (Test-Path -Path $installWizardPath) {
 <h2>32. Rename .evn.example to .env</h2>
 
 **From an elevated powershell window run the following commands**
-<h1>fix 31 and finish work with env variable</h1>
+
 ```Powershell
 Rename-Item -Path "$($env:devReposFolder)sitecore-global-components-server$([System.IO.Path]::DirectorySeparatorChar).env.example" -NewName .env
 ```
