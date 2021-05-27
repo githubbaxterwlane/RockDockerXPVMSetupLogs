@@ -386,26 +386,56 @@ choco install docker-desktop -y
 Restart-Computer
 ```
 
-<h2>28. Clone the Global Server repo</h2>
+<h2>28. Set your Repositories folder as an Environmental Variable</h2>
+
+**From an elevated powershell window run the following commands**
+**Note: If your repos path is different than the below, please change the $devReposFolder before running**
+
+<h3>If your chosen repos folder isn't the one set below, change it before running the script</h3>
+
+```Powershell
+[string]$devReposFolder = "C:\Projects"
+$devReposFolder = $devReposFolder.Trim()
+If (!$devReposFolder.EndsWith([System.IO.Path]::DirectorySeparatorChar)) { $devReposFolder += [System.IO.Path]::DirectorySeparatorChar }
+[Environment]::SetEnvironmentVariable("DevReposFolder", $devReposFolder ,"Machine")
+```
+
+Close and open your powershell console in Admin Mode
+
+<h2>29. Clone the Global Server repo</h2>
 
 Connect to the VPN by executing "Pulse Secure Start Stop" from this VMs host
 
 **From an elevated powershell window run the following commands**
-**Note: If your repos path is different than the below, please change the $repoPath before running**
 
 ```Powershell
-[string]$repoPath = "c:\Projects"
+
+[string]$repoPath = $env:devReposFolder
 If (Test-Path -Path $repoPath) { Write-Host("Repo Path already there") } else { New-Item -ItemType Directory -Path $repoPath; Write-Host("Creating Repo Path") }
-git clone https://git.rockfin.com/marketing-web/sitecore-global-components-server.git
+
+Set-location -Path $repoPath
+
+[string]$globalServerRepoName = "sitecore-global-components-server"
+[string]$relativeGlobalRepoPath = ".$([System.IO.Path]::DirectorySeparatorChar)$($globalServerRepoName)$([System.IO.Path]::DirectorySeparatorChar)"
+[string]$globalRepoUrl = "https://git.rockfin.com/marketing-web/$($globalServerRepoName).git"
+
+if (!(Test-Path -Path $relativeGlobalRepoPath)){
+    Write-Host("Cloning global repo.")
+    Write-Host("   Url: $globalRepoUrl")
+    Write-Host("   To Relative Path: $relativeGlobalRepoPath")
+    git clone $globalRepoUrl
+} else {
+    Write-Host("The global server repo is already there, so no need to clone it")
+}
+
 ```
 
 Disconnect from the VPN by executing "Pulse Secure Start Stop" from this VMs host
 
-<h2>29. Setup Powershell 5 and 7 as best for a Developer (<em>Optional</em>)</h2>
+<h2>30. Setup Powershell 5 and 7 as best for a Developer (<em>Optional</em>)</h2>
 
 #### Do this in both Powershell 7 (pwsh) and Powershell 5 (powershell)
 #### The exact same commands should be executed in both
-#### If you didn't use c:\projects as your repo root change the below references to it 
 
 ```Powershell
 
@@ -465,15 +495,15 @@ C:\Projects>
 
 ```
 
-<h2>30. Install SVS (Sitecore for Visual Studio)</h2>
+<h2>31. Install SVS (Sitecore for Visual Studio)</h2>
 
-<h3>30.1. Request from your Lead a key for SVS</h3>
+<h3>31.1. Request from your Lead a key for SVS</h3>
 
 * Example Lead: Reddy, Yashita
 * Example Lead Title: Team Leader, Engineering        
 * Example Key: bahc-n9f-m0c-253n __(this one is used already, please don't use it again)__
 
-<h3>30.2. Download Sitecore for Visual Studio 1.0.0.3 and Run through the Installation Wizard</h3> 
+<h3>31.2. Download Sitecore for Visual Studio 1.0.0.3 and Run through the Installation Wizard</h3> 
 
 **From an elevated powershell window run the following commands**
 
@@ -515,30 +545,30 @@ If (Test-Path -Path $installWizardPath) {
 
 ```
 
-**Run through the below wizard to finish the installation**
+**Run through the wizard to finish the installation**
 
 <img src="images/InstallVSIXIntoVS2019.JPG" width="45%"/>
 
-<h3>30.3. Open VS 2019</h3>
+<h3>31.3. Open VS 2019</h3>
 
 <img src="images/RunVS2019AsAnAdmin.JPG" width="40%"/>
 
-<h3>30.4. Open Quicken.Global.sln from where you cloned the sitecore-global-components-server repo</h3>
+<h3>31.4. Open Quicken.Global.sln from where you cloned the sitecore-global-components-server repo</h3>
 * Repo Url: https://git.rockfin.com/marketing-web/sitecore-global-components-server
 
 <img src="images/OpenQuickenGlobalSln.jpg" width="66%"/>
 
-<h3>30.5. If you are prompted to enter a license key upon the solution opening in VS 2019</h3>
+<h3>31.5. If you are prompted to enter a license key upon the solution opening in VS 2019</h3>
 * See "Enter Your License Key" below for details
 
-<h3>30.6. Open the Sitecore Module Explorer</h3>
+<h3>31.6. Open the Sitecore Module Explorer</h3>
   * Right click on the Quicken.Global solution in the Solutions Explorer
   <br>
   <img src="images/SitecoreModuleExplorerInSolutionContextMenu.JPG" width="66%"/>
   <br>
   <img src="images/SitecoreModuleExplorerViewLIcense.JPG" width="66%"/>
 
-<h3>30.7. Enter Your License Key</h3>
+<h3>31.7. Enter Your License Key</h3>
 
 **This Product is License To:** Quicken Loans 
 
@@ -546,9 +576,9 @@ If (Test-Path -Path $installWizardPath) {
 
 <img src="images/SVSPromptToEnterALicenseKey.jpg" width="66%"/>
 
-<h3>30.8. Close VS 2019</h3>
-<h3>30.11. Open VS 2019 back and open the Quicken.Global.sln again</h3>
-<h3>30.12. If prompted to accept the license agreement for SVS, do so, if not close and open VS 2019 in admin mode again and open the Quicken.Global.sln again</h3>
+<h3>31.8. Close VS 2019</h3>
+<h3>31.9. Open VS 2019 back and open the Quicken.Global.sln again</h3>
+<h3>31.10. If prompted to accept the license agreement for SVS, do so, if not close and open VS 2019 in admin mode again and open the Quicken.Global.sln again</h3>
 
 **SVS License Agreement**
 
@@ -557,6 +587,143 @@ If (Test-Path -Path $installWizardPath) {
 * Here is what the **Sitecore Module Explorer** will look like in Visual Studio 2019 Admin Mode when all is well with SVS
 
 <img src="images/SitecoreModuleExplorerInSolutionSuccess.jpg" width="66%"/>
+
+<h2>32. Rename .evn.example to .env</h2>
+
+**From an elevated powershell window run the following commands**
+<h1>fix 31 and finish work with env variable</h1>
+```Powershell
+Rename-Item -Path "$($env:devReposFolder)sitecore-global-components-server$([System.IO.Path]::DirectorySeparatorChar).env.example" -NewName .env
+```
+
+<h2>33. Setup SSH to allow remote connections from the VM Host to the VM</h2>
+
+**From an elevated powershell window run the following commands**
+
+```Powershell
+Get-WindowsCapability -Online | Where-Object { $_.Name -like "*SSH.S*" } | Add-WindowsCapability -Online
+Get-Service | Where-Object { $_.Description -like "*SSH*"  } | Set-Service -StartupType Automatic
+Get-Service | Where-Object { $_.Description -like "*SSH*"  } | Start-Service
+```
+
+<h2>33. Run the Initialize Scripts required to start the docker build process</h2>
+
+<h3>33.1 Run init.ps1</h3>
+
+**From an elevated powershell window run the following commands**
+
+```Powershell
+Set-Location -Path "$($env:devReposFolder)sitecore-global-components-server$([System.IO.Path]::DirectorySeparatorChar)"
+.\init1.ps1
+```
+
+**Output**
+
+<img src="images/InitPS1Output.jpg" width="55%">
+
+<h3>33.2 Run init.bat</h3>
+
+<em><strong>From a <span style="color:red">non admin elevated cmd prompt</span> run the following commands one at a time</strong></em>
+
+```bat
+cd %devReposFolder%sitecore-global-components-server\
+```
+
+```bat
+init2.bat
+```
+
+**Select yes when prompted**
+
+<img src="images\mkcertSecurityWarning.jpg">
+
+**Close the non elevated cmd window**
+
+<h2>34. Enable Hyper-V containers</h2>
+
+**From an elevated powershell window run the following commands**
+
+```Powershell
+Enable-WindowsOptionalFeature -Online -FeatureName $("Microsoft-Hyper-V", "Containers") -All -NoRestart
+Restart-Computer
+```
+
+<h2>35. Switch Docker Container Type to Windows Containers</h2>
+
+**From an elevated powershell window run the following commands**
+
+```Powershell
+function Test-IsDockerInWindowsContainerMode{
+
+    [string[]]$dockerVersionArray = docker version
+
+    [string]$serverString = "server:"
+    [string]$engineString = "engine:"
+
+    [string]$archString = "os/arch:"
+    [string]$windowsArchValue = "windows/amd64"
+    [string]$linuxArchValue = "linux/amd64"
+
+    [bool]$foundServerSection = $false
+    [bool]$foundEngineSection = $false
+
+    foreach($curVersionLine in $dockerVersionArray){
+        
+        if($foundServerSection){
+
+            if($foundEngineSection){
+
+                if($curVersionLine.Trim().ToLower().StartsWith($archString)){
+
+                    [string[]]$versionLineNameValueArrary = $curVersionLine.Split(":")
+
+                    [string]$archVersionValue = $versionLineNameValueArrary[1].Trim().ToLower()
+
+                    if($archVersionValue -eq $windowsArchValue){ 
+                        return $true
+                    } elseif ($archVersionValue -eq $linuxArchValue) {
+                        return $false
+                    } else {
+                        Write-Warning("Found Architecture version line but can't determine if Linux or Windows! $curVersionLine.Trim()")
+                        Write-Warning("   Expected Windows Value: $windowsArchValue")
+                        Write-Warning("   Expected Linux Value: $linuxArchValue")
+                        Write-Warning("   Actual Value: $archVersionValue")
+                        break;
+                    }
+
+                }
+            } else {
+
+                if($curVersionLine.Trim().ToLower().StartsWith($engineString)){
+                    $foundEngineSection = $true
+                }
+            }
+        } else {
+            
+            if($curVersionLine.Trim().ToLower().StartsWith($serverString)){
+                $foundServerSection = $true
+            }
+        }
+    }
+
+    throw "Could not determine Docker Container Mode!"
+}
+
+function Switch-DockerContainerMode{
+    & 'C:\Program Files\Docker\Docker\DockerCli.exe' -SwitchDaemon
+}
+function Switch-DockerToWindowsContainers{
+
+    if(Test-IsDockerInWindowsContainerMode){
+        Write-Host("Docker is already in Windows Container Mode.")
+    } else {
+        Write-Host("Switching Docker to Windows Container Mode")
+        Switch-DockerContainerMode
+    }
+}
+
+Switch-DockerToWindowsContainers
+```
 
 
 
